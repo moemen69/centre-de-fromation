@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training Centre Platform</title>
+    <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+
+    <div id="role-selection" class="screen active">
+        <div class="login-card">
+            <h1>Training Centre Platform</h1>
+            <p>Select your role to continue</p>
+            <div class="role-buttons">
+                <button onclick="app.login('admin')">Admin</button>
+                <button onclick="app.login('professor')">Professor</button>
+                <button onclick="app.login('student')">Student</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="portal-layout" class="screen">
+        <aside id="sidebar">
+            <div class="sidebar-header">
+                <h2 id="portal-title">Portal</h2>
+            </div>
+            <nav id="sidebar-nav">
+                </nav>
+            <button class="logout-btn" onclick="app.logout()">Log Out</button>
+        </aside>
+        
+        <main id="main-content">
+            <header class="top-header">
+                <h2 id="page-title">Dashboard</h2>
+                <div id="user-info">Welcome, User</div>
+            </header>
+            
+            <div id="app-view"></div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
