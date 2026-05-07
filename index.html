@@ -5,25 +5,81 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Centre Platform</title>
     <link rel="stylesheet" href="styles.css">
-    </head>
+</head>
 <body>
 
-    <div id="role-selection" class="screen active">
-        <div class="login-card">
-            <h1>Training Centre Platform</h1>
-            <p>Select your role to continue</p>
-            <div class="role-buttons">
-                <button onclick="app.login('admin')">Admin</button>
-                <button onclick="app.login('professor')">Professor</button>
-                <button onclick="app.login('student')">Student</button>
+    <div id="auth-screen" class="screen active">
+        <div class="auth-card glass-panel">
+            <div class="auth-header">
+                <h1 class="gold-text">Training Centre</h1>
+                <p id="auth-subtitle">Welcome back, please log in.</p>
             </div>
+
+            <div class="auth-toggle">
+                <button id="tab-login" class="active" onclick="app.toggleAuth('login')">Log In</button>
+                <button id="tab-register" onclick="app.toggleAuth('register')">Sign Up</button>
+            </div>
+
+            <form id="login-form" onsubmit="app.handleAuth(event, 'login')">
+                <div class="role-selector">
+                    <label class="role-radio">
+                        <input type="radio" name="login-role" value="student" checked>
+                        <span>Student</span>
+                    </label>
+                    <label class="role-radio">
+                        <input type="radio" name="login-role" value="professor">
+                        <span>Professor</span>
+                    </label>
+                    <label class="role-radio">
+                        <input type="radio" name="login-role" value="admin">
+                        <span>Admin</span>
+                    </label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                
+                <button type="submit" class="gold-btn">Access Portal</button>
+            </form>
+
+            <form id="register-form" class="hidden" onsubmit="app.handleAuth(event, 'register')">
+                <div class="role-selector">
+                    <label class="role-radio">
+                        <input type="radio" name="reg-role" value="student" checked>
+                        <span>Student</span>
+                    </label>
+                    <label class="role-radio">
+                        <input type="radio" name="reg-role" value="professor">
+                        <span>Professor</span>
+                    </label>
+                </div>
+
+                <div class="input-group">
+                    <input type="text" id="reg-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="reg-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="reg-password" placeholder="Create Password" required>
+                </div>
+                
+                <button type="submit" class="gold-btn outline">Create Account</button>
+            </form>
         </div>
     </div>
 
     <div id="portal-layout" class="screen">
-        <aside id="sidebar">
+        <div id="mobile-overlay" onclick="app.toggleMobileMenu()"></div>
+
+        <aside id="sidebar" class="glass-panel">
             <div class="sidebar-header">
-                <h2 id="portal-title">Portal</h2>
+                <h2 id="portal-title" class="gold-text">Portal</h2>
+                <button class="mobile-close" onclick="app.toggleMobileMenu()">×</button>
             </div>
             <nav id="sidebar-nav">
                 </nav>
@@ -31,12 +87,19 @@
         </aside>
         
         <main id="main-content">
-            <header class="top-header">
-                <h2 id="page-title">Dashboard</h2>
-                <div id="user-info">Welcome, User</div>
+            <header class="top-header glass-panel">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="app.toggleMobileMenu()">☰</button>
+                    <h2 id="page-title">Dashboard</h2>
+                </div>
+                <div id="user-info">
+                    <span id="user-name-display">User</span>
+                    <div class="avatar"></div>
+                </div>
             </header>
             
-            <div id="app-view"></div>
+            <div id="app-view">
+                </div>
         </main>
     </div>
 
