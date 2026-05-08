@@ -5,13 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Training Centre Platform</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-    <div id="auth-screen" class="screen active">
+    <div id="landing-screen" class="screen active">
+        <nav class="landing-nav glass-panel">
+            <div class="logo">
+                <span class="gold-text" style="font-weight: bold; font-size: 1.5rem;">Training Centre</span>
+            </div>
+            <button class="gold-btn outline small" onclick="app.goToAuth()">Access Portal</button>
+        </nav>
+
+        <main class="landing-hero">
+            <h1 class="cinematic-title">Excellence in <span class="gold-text glow">Professional Training</span></h1>
+            <p class="hero-subtitle">Elevate your career with accredited programs and proven industry expertise.</p>
+            
+            <div class="features-grid">
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3 class="gold-text">BTP Diplôme</h3>
+                    <p>Brevet de Technicien Professionnel. Comprehensive foundational training for your career.</p>
+                </div>
+                
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="gold-text">BTS Diplôme</h3>
+                    <p>Brevet de Technicien Supérieur. Advanced specialized skills for the modern workforce.</p>
+                </div>
+                
+                <div class="glass-panel feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="gold-text">+5 Années</h3>
+                    <p>Over 5 years of professional excellence and successful student integration into the workforce.</p>
+                </div>
+            </div>
+
+            <button class="gold-btn large-btn glow-box" onclick="app.goToAuth()">Start Your Journey</button>
+        </main>
+        
+        <div class="ambient-glow glow-1"></div>
+        <div class="ambient-glow glow-2"></div>
+    </div>
+
+    <div id="auth-screen" class="screen">
         <div class="auth-card glass-panel">
+            <button class="back-link" onclick="app.goToLanding()">← Back to Home</button>
             <div class="auth-header">
-                <h1 class="gold-text">Training Centre</h1>
+                <h1 class="gold-text">Portal Access</h1>
                 <p id="auth-subtitle">Welcome back, please log in.</p>
             </div>
 
@@ -43,7 +84,7 @@
                     <input type="password" id="login-password" placeholder="Password" required>
                 </div>
                 
-                <button type="submit" class="gold-btn">Access Portal</button>
+                <button type="submit" class="gold-btn">Log In</button>
             </form>
 
             <form id="register-form" class="hidden" onsubmit="app.handleAuth(event, 'register')">

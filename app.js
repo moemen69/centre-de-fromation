@@ -8,10 +8,16 @@ const app = {
         this.initializeData();
         window.addEventListener('hashchange', () => this.router());
         
+        // Check for active session
         const savedRole = localStorage.getItem('currentUserRole');
         const savedName = localStorage.getItem('currentUserName');
+        
         if (savedRole) {
+            // If logged in, skip landing and auth, go straight to portal
             this.loginSuccess(savedRole, savedName, false);
+        } else {
+            // If not logged in, show the Landing Page by default
+            this.showScreen('landing-screen');
         }
     },
 
@@ -38,7 +44,21 @@ const app = {
         localStorage.setItem('platformData', JSON.stringify(data));
     },
 
-    // --- 2. Authentication UI Flow ---
+    // --- 2. Screen Navigation (Pre-Login) ---
+    showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    },
+
+    goToAuth() {
+        this.showScreen('auth-screen');
+    },
+
+    goToLanding() {
+        this.showScreen('landing-screen');
+    },
+
+    // --- 3. Authentication UI Flow ---
     toggleAuth(tab) {
         const loginForm = document.getElementById('login-form');
         const regForm = document.getElementById('register-form');
@@ -90,8 +110,7 @@ const app = {
         localStorage.setItem('currentUserRole', this.currentUserRole);
         localStorage.setItem('currentUserName', this.currentUserName);
         
-        document.getElementById('auth-screen').classList.remove('active');
-        document.getElementById('portal-layout').classList.add('active');
+        this.showScreen('portal-layout');
         document.getElementById('user-name-display').innerText = this.currentUserName;
         
         this.renderSidebar();
@@ -110,12 +129,14 @@ const app = {
         localStorage.removeItem('currentUserName');
         
         window.location.hash = '';
-        document.getElementById('portal-layout').classList.remove('active');
-        document.getElementById('auth-screen').classList.add('active');
         
+        // Reset forms
         document.getElementById('login-form').reset();
         document.getElementById('register-form').reset();
         this.toggleAuth('login');
+
+        // Go back to the landing page on logout
+        this.showScreen('landing-screen');
     },
 
     toggleMobileMenu() {
@@ -127,7 +148,7 @@ const app = {
         if (sidebar.classList.contains('open')) sidebar.classList.remove('open');
     },
 
-    // --- 3. Navigation & Routing ---
+    // --- 4. Navigation & Routing ---
     renderSidebar() {
         const nav = document.getElementById('sidebar-nav');
         let links = [];
@@ -160,6 +181,9 @@ const app = {
     },
 
     router() {
+        // If not logged in, ignore routing and keep on current public screen
+        if (!this.currentUserRole) return; 
+
         const hash = window.location.hash || `#/${this.currentUserRole}/dashboard`;
         const viewContainer = document.getElementById('app-view');
         const pageTitle = document.getElementById('page-title');
@@ -190,8 +214,7 @@ const app = {
         }
     },
 
-    // --- 4. Page Renderers ---
-
+    // --- 5. Page Renderers ---
     renderDashboard(container) {
         container.innerHTML = `
             <div class="dashboard-grid">
@@ -244,8 +267,7 @@ const app = {
                                 <th style="padding: 10px;">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="prof-table-body">
-                            </tbody>
+                        <tbody id="prof-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -312,8 +334,7 @@ const app = {
                                 <th style="padding: 10px;">Action</th>
                             </tr>
                         </thead>
-                        <tbody id="stud-table-body">
-                            </tbody>
+                        <tbody id="stud-table-body"></tbody>
                     </table>
                 </div>
             </div>
@@ -352,7 +373,6 @@ const app = {
         `).join('');
     },
 
-    // --- 5. Global Actions ---
     deleteUser(type, id) {
         if(confirm(`Are you sure you want to delete this ${type.slice(0, -1)}?`)) {
             const data = this.getData();
