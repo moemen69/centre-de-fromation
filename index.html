@@ -3,17 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Institut Centrale de Tunis (ICT) - Portal</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Institut Centrale de Tunis (ICT) - Executive Portal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
     <div id="landing-screen" class="screen active">
         <nav class="executive-nav">
             <div class="nav-logo">
-                <span class="gold-text">Institut Centrale de Tunis</span>
+                <span class="gold-text">ICT.</span>
             </div>
             <div class="nav-links" id="desktop-nav-links">
                 <a href="#home">Home</a>
@@ -32,13 +35,14 @@
             <a href="#programs" onclick="app.toggleLandingMenu()">Programs</a>
             <a href="#about" onclick="app.toggleLandingMenu()">About Us</a>
             <a href="#contact" onclick="app.toggleLandingMenu()">Contact</a>
+            <button class="gold-btn" style="margin: 1rem 5%; width: 90%;" onclick="app.goToAuth()">Access Portal</button>
         </div>
 
         <main class="landing-hero" id="home">
-            <div class="hero-split">
+            <div class="hero-split fade-in-up">
                 <div class="hero-text">
-                    <h1 class="cinematic-title">Excellence in <span class="gold-text glow">Professional Training</span></h1>
-                    <p class="hero-subtitle">Elevate your career at ICT with accredited programs and proven industry expertise.</p>
+                    <h1 class="cinematic-title">Excellence in <br><span class="gold-text glow">Professional Training</span></h1>
+                    <p class="hero-subtitle">Elevate your career at Institut Centrale de Tunis with accredited programs and proven industry expertise.</p>
                     <button class="gold-btn large-btn glow-box" onclick="app.goToAuth()">Start Your Journey</button>
                 </div>
                 <div class="hero-image-wrapper">
@@ -48,17 +52,20 @@
                 </div>
             </div>
             
-            <div class="features-grid" id="programs">
+            <div class="features-grid fade-in-up" style="animation-delay: 0.2s;" id="programs">
                 <div class="feature-card">
-                    <div class="feature-icon">🎓</div><h3 class="gold-text">BTP Diplôme</h3>
+                    <div class="feature-icon">🎓</div>
+                    <h3 class="gold-text">BTP Diplôme</h3>
                     <p>Brevet de Technicien Professionnel. Comprehensive foundational training for your career.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🚀</div><h3 class="gold-text">BTS Diplôme</h3>
+                    <div class="feature-icon">🚀</div>
+                    <h3 class="gold-text">BTS Diplôme</h3>
                     <p>Brevet de Technicien Supérieur. Advanced specialized skills for the modern workforce.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⭐</div><h3 class="gold-text">+5 Années</h3>
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="gold-text">+5 Années</h3>
                     <p>Over 5 years of professional excellence and successful student integration into the workforce.</p>
                 </div>
             </div>
@@ -67,7 +74,7 @@
         <footer class="executive-footer" id="contact">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h3 class="gold-text">ICT</h3>
+                    <h3 class="gold-text" style="font-family: 'Playfair Display', serif;">ICT</h3>
                     <p>Institut Centrale de Tunis.<br>Excellence in executive professional training.</p>
                 </div>
                 <div class="footer-col">
@@ -90,10 +97,10 @@
     </div>
 
     <div id="auth-screen" class="screen">
-        <div class="auth-card">
-            <button class="back-link" onclick="app.goToLanding()">← Back to Home</button>
+        <div class="auth-card fade-in-up">
+            <button class="back-link" onclick="app.goToLanding()"><i class="fas fa-arrow-left"></i> Back to Home</button>
             <div class="auth-header">
-                <h1 class="gold-text">Portal Access</h1>
+                <h1 class="gold-text cinematic-title" style="font-size: 2rem;">Portal Access</h1>
                 <p id="auth-subtitle">Welcome back, please log in.</p>
             </div>
 
@@ -108,9 +115,15 @@
                     <label class="role-radio"><input type="radio" name="login-role" value="professor"><span>Professor</span></label>
                     <label class="role-radio"><input type="radio" name="login-role" value="admin"><span>Admin</span></label>
                 </div>
-                <div class="input-group"><input type="email" id="login-email" placeholder="Email Address" required></div>
-                <div class="input-group"><input type="password" id="login-password" placeholder="Password" required></div>
-                <button type="submit" class="gold-btn">Log In</button>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="gold-btn">Secure Login</button>
             </form>
 
             <form id="register-form" class="hidden" onsubmit="app.handleAuth(event, 'register')">
@@ -118,9 +131,18 @@
                     <label class="role-radio"><input type="radio" name="reg-role" value="student" checked><span>Student</span></label>
                     <label class="role-radio"><input type="radio" name="reg-role" value="professor"><span>Professor</span></label>
                 </div>
-                <div class="input-group"><input type="text" id="reg-name" placeholder="Full Name" required></div>
-                <div class="input-group"><input type="email" id="reg-email" placeholder="Email Address" required></div>
-                <div class="input-group"><input type="password" id="reg-password" placeholder="Create Password" required></div>
+                <div class="input-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="reg-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="reg-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="reg-password" placeholder="Create Password" required>
+                </div>
                 <button type="submit" class="gold-btn outline">Create Account</button>
             </form>
         </div>
@@ -131,11 +153,13 @@
 
         <aside id="sidebar">
             <div class="sidebar-header">
-                <h2 id="portal-title" class="gold-text">Portal</h2>
-                <button class="mobile-close" onclick="app.toggleAppSidebar()">×</button>
+                <h2 id="portal-title" class="gold-text" style="font-family: 'Playfair Display', serif;">ICT Portal</h2>
+                <button class="mobile-close" onclick="app.toggleAppSidebar()"><i class="fas fa-times"></i></button>
             </div>
             <nav id="sidebar-nav"></nav>
-            <button class="logout-btn" onclick="app.logout()">Log Out</button>
+            <div class="sidebar-footer">
+                <button class="logout-btn" onclick="app.logout()"><i class="fas fa-sign-out-alt"></i> Log Out</button>
+            </div>
         </aside>
         
         <main id="main-content">
@@ -145,12 +169,13 @@
                     <h2 id="page-title">Dashboard</h2>
                 </div>
                 <div id="user-info">
-                    <span id="user-name-display">User</span>
+                    <span id="user-name-display" class="hide-mobile-text">User</span>
                     <div class="avatar"><i class="fas fa-user"></i></div>
                 </div>
             </header>
             
-            <div id="app-view"></div>
+            <div id="app-view">
+                </div>
         </main>
     </div>
 
