@@ -23,9 +23,7 @@
             </div>
             <div class="nav-actions">
                 <button class="gold-btn get-started-btn" onclick="app.goToAuth()">Access Portal</button>
-                <button class="hamburger" onclick="app.toggleLandingMenu()" aria-label="Menu">
-                    <i class="fas fa-bars"></i>
-                </button>
+                <button class="hamburger" onclick="app.toggleLandingMenu()"><i class="fas fa-bars"></i></button>
             </div>
         </nav>
 
@@ -52,18 +50,15 @@
             
             <div class="features-grid" id="programs">
                 <div class="feature-card">
-                    <div class="feature-icon">🎓</div>
-                    <h3 class="gold-text">BTP Diplôme</h3>
+                    <div class="feature-icon">🎓</div><h3 class="gold-text">BTP Diplôme</h3>
                     <p>Brevet de Technicien Professionnel. Comprehensive foundational training for your career.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">🚀</div>
-                    <h3 class="gold-text">BTS Diplôme</h3>
+                    <div class="feature-icon">🚀</div><h3 class="gold-text">BTS Diplôme</h3>
                     <p>Brevet de Technicien Supérieur. Advanced specialized skills for the modern workforce.</p>
                 </div>
                 <div class="feature-card">
-                    <div class="feature-icon">⭐</div>
-                    <h3 class="gold-text">+5 Années</h3>
+                    <div class="feature-icon">⭐</div><h3 class="gold-text">+5 Années</h3>
                     <p>Over 5 years of professional excellence and successful student integration into the workforce.</p>
                 </div>
             </div>
@@ -73,38 +68,22 @@
             <div class="footer-grid">
                 <div class="footer-col">
                     <h3 class="gold-text">ICT</h3>
-                    <p>Institut Centrale de Tunis.<br>Excellence in executive professional training and workforce integration.</p>
-                    <div class="social-icons" style="margin-top: 1rem;">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-whatsapp"></i></a>
-                    </div>
-                </div>
-                <div class="footer-col">
-                    <h4 class="gold-text">Quick Links</h4>
-                    <a href="#home">Home</a>
-                    <a href="#programs">Programs</a>
-                    <a href="#about">About Us</a>
-                    <a href="#" onclick="app.goToAuth()">Student Portal</a>
+                    <p>Institut Centrale de Tunis.<br>Excellence in executive professional training.</p>
                 </div>
                 <div class="footer-col">
                     <h4 class="gold-text">Contact Us</h4>
-                    <p><i class="fas fa-map-marker-alt" style="margin-right: 8px;"></i> Tunis, Tunisia</p>
                     <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> contact@ict.tn</p>
                     <p><i class="fas fa-phone" style="margin-right: 8px;"></i> +216 71 XXX XXX</p>
                 </div>
                 <div class="footer-col">
                     <h4 class="gold-text">Newsletter</h4>
-                    <p>Subscribe for updates and admissions news.</p>
-                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed to newsletter!');">
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
                         <input type="email" placeholder="Email Address" required>
                         <button type="submit" class="gold-btn" style="color: #000;">Subscribe</button>
                     </form>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Institut Centrale de Tunis. All rights reserved.</p>
-            </div>
+            <div class="footer-bottom"><p>&copy; 2026 Institut Centrale de Tunis. All rights reserved.</p></div>
         </footer>
         <div class="ambient-glow glow-1"></div>
         <div class="ambient-glow glow-2"></div>
@@ -155,8 +134,7 @@
                 <h2 id="portal-title" class="gold-text">Portal</h2>
                 <button class="mobile-close" onclick="app.toggleAppSidebar()">×</button>
             </div>
-            <nav id="sidebar-nav">
-                </nav>
+            <nav id="sidebar-nav"></nav>
             <button class="logout-btn" onclick="app.logout()">Log Out</button>
         </aside>
         
@@ -168,12 +146,11 @@
                 </div>
                 <div id="user-info">
                     <span id="user-name-display">User</span>
-                    <div class="avatar"></div>
+                    <div class="avatar"><i class="fas fa-user"></i></div>
                 </div>
             </header>
             
-            <div id="app-view">
-                </div>
+            <div id="app-view"></div>
         </main>
     </div>
 
