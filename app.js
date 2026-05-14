@@ -3,62 +3,57 @@ const app = {
     currentUserName: null,
     currentChart: null,
     
-    // --- 1. Initialization ---
+    // --- Initialize ---
     init() {
         this.initializeData();
         window.addEventListener('hashchange', () => this.router());
         
-        // Check for active session
+        // Check if user is already logged in via memory
         const savedRole = localStorage.getItem('currentUserRole');
         const savedName = localStorage.getItem('currentUserName');
         
         if (savedRole) {
-            // If logged in, skip landing and auth, go straight to portal
             this.loginSuccess(savedRole, savedName, false);
         } else {
-            // If not logged in, show the Landing Page by default
             this.showScreen('landing-screen');
         }
     },
 
+    // --- Mock Data Management ---
     initializeData() {
         if (!localStorage.getItem('platformData')) {
             localStorage.setItem('platformData', JSON.stringify({
                 professors: [
-                    { id: 1, name: 'Dr. Alan Turing', email: 'alan@training.com', specialty: 'Computer Science', status: 'Paid' }
+                    { id: 1, name: 'Dr. Alan Turing', email: 'alan@ict.tn', specialty: 'Computer Science' }
                 ],
                 students: [
-                    { id: 1, name: 'Sarah Connor', email: 'sarah@student.com', level: 'Advanced', course: 'Cybersecurity' }
-                ],
-                courses: [],
-                payments: []
+                    { id: 1, name: 'Sarah Connor', email: 'sarah@student.ict.tn', level: 'Advanced' }
+                ]
             }));
         }
     },
 
-    getData() {
-        return JSON.parse(localStorage.getItem('platformData'));
-    },
+    getData() { return JSON.parse(localStorage.getItem('platformData')); },
+    saveData(data) { localStorage.setItem('platformData', JSON.stringify(data)); },
 
-    saveData(data) {
-        localStorage.setItem('platformData', JSON.stringify(data));
-    },
-
-    // --- 2. Screen Navigation (Pre-Login) ---
+    // --- Strict Screen Routing (Fixes Dashboard on Landing Page) ---
     showScreen(screenId) {
+        // Force hide everything
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        // Show ONLY the requested screen
         document.getElementById(screenId).classList.add('active');
+        window.scrollTo(0, 0); 
     },
 
-    goToAuth() {
-        this.showScreen('auth-screen');
+    goToAuth() { this.showScreen('auth-screen'); },
+    goToLanding() { this.showScreen('landing-screen'); },
+
+    toggleLandingMenu() {
+        const menu = document.getElementById('mobile-nav-menu');
+        menu.classList.toggle('open');
     },
 
-    goToLanding() {
-        this.showScreen('landing-screen');
-    },
-
-    // --- 3. Authentication UI Flow ---
+    // --- Authentication Flow ---
     toggleAuth(tab) {
         const loginForm = document.getElementById('login-form');
         const regForm = document.getElementById('register-form');
@@ -82,23 +77,21 @@ const app = {
 
     handleAuth(event, type) {
         event.preventDefault();
-
-        let role, email, password, name;
+        let role, email, name;
 
         if (type === 'login') {
             role = document.querySelector('input[name="login-role"]:checked').value;
             email = document.getElementById('login-email').value;
-            password = document.getElementById('login-password').value;
             name = email.split('@')[0]; 
         } else {
             role = document.querySelector('input[name="reg-role"]:checked').value;
             name = document.getElementById('reg-name').value;
             email = document.getElementById('reg-email').value;
-            password = document.getElementById('reg-password').value;
             alert('Account created successfully! Logging you in...');
         }
 
-        if (email && password) {
+        if (email) {
+            // Trigger login success which HIDES the auth screen and SHOWS the dashboard
             this.loginSuccess(role, name);
         }
     },
@@ -110,16 +103,14 @@ const app = {
         localStorage.setItem('currentUserRole', this.currentUserRole);
         localStorage.setItem('currentUserName', this.currentUserName);
         
+        // Strictly switch from Login Screen to Portal Layout
         this.showScreen('portal-layout');
         document.getElementById('user-name-display').innerText = this.currentUserName;
         
         this.renderSidebar();
         
-        if (redirect) {
-            window.location.hash = `#/${role}/dashboard`;
-        } else {
-            this.router();
-        }
+        if (redirect) window.location.hash = `#/${role}/dashboard`;
+        else this.router();
     },
 
     logout() {
@@ -127,19 +118,18 @@ const app = {
         this.currentUserName = null;
         localStorage.removeItem('currentUserRole');
         localStorage.removeItem('currentUserName');
-        
         window.location.hash = '';
         
-        // Reset forms
         document.getElementById('login-form').reset();
         document.getElementById('register-form').reset();
         this.toggleAuth('login');
-
-        // Go back to the landing page on logout
+        
+        // Go back to public landing page
         this.showScreen('landing-screen');
     },
 
-    toggleMobileMenu() {
+    // --- Portal Sidebar & Internal Routing ---
+    toggleAppSidebar() {
         document.getElementById('sidebar').classList.toggle('open');
     },
 
@@ -148,18 +138,16 @@ const app = {
         if (sidebar.classList.contains('open')) sidebar.classList.remove('open');
     },
 
-    // --- 4. Navigation & Routing ---
     renderSidebar() {
         const nav = document.getElementById('sidebar-nav');
         let links = [];
 
+        // Dynamic links based on the role the user chose
         if (this.currentUserRole === 'admin') {
             links = [
                 { path: '#/admin/dashboard', name: 'Dashboard' },
-                { path: '#/admin/professors', name: 'Professors' },
-                { path: '#/admin/students', name: 'Students' },
-                { path: '#/admin/payments', name: 'Payments' },
-                { path: '#/admin/courses', name: 'Courses' }
+                { path: '#/admin/professors', name: 'Manage Professors' },
+                { path: '#/admin/students', name: 'Manage Students' },
             ];
         } else if (this.currentUserRole === 'professor') {
             links = [
@@ -181,7 +169,6 @@ const app = {
     },
 
     router() {
-        // If not logged in, ignore routing and keep on current public screen
         if (!this.currentUserRole) return; 
 
         const hash = window.location.hash || `#/${this.currentUserRole}/dashboard`;
@@ -197,7 +184,7 @@ const app = {
 
         pageTitle.innerText = view.charAt(0).toUpperCase() + view.slice(1);
         
-        // Route Controller
+        // Render Correct View Based on Role
         if (view === 'dashboard') {
             this.renderDashboard(viewContainer);
         } else if (view === 'professors' && this.currentUserRole === 'admin') {
@@ -205,43 +192,61 @@ const app = {
         } else if (view === 'students' && this.currentUserRole === 'admin') {
             this.renderAdminStudents(viewContainer);
         } else {
+            // Generic view for other Professor/Student pages
             viewContainer.innerHTML = `
                 <div class="card">
-                    <h3 class="gold-text">${pageTitle.innerText} Module</h3>
-                    <p style="color: var(--text-gray); margin-top: 10px;">This section is under construction.</p>
+                    <h3 class="gold-text">${pageTitle.innerText} Space</h3>
+                    <p style="color: var(--text-gray); margin-top: 10px;">Welcome to your personalized ${view} area. Data and modules will load here.</p>
                 </div>
             `;
         }
     },
 
-    // --- 5. Page Renderers ---
+    // --- Internal App Views ---
     renderDashboard(container) {
-        container.innerHTML = `
-            <div class="dashboard-grid">
-                <div class="card stat-card">
-                    <h3>Registered Professors</h3>
-                    <p class="stat-number" id="stat-prof">0</p>
-                </div>
-                <div class="card stat-card">
-                    <h3>Enrolled Students</h3>
-                    <p class="stat-number" id="stat-stud">0</p>
-                </div>
-                <div class="card stat-card">
-                    <h3>System Status</h3>
-                    <p class="stat-number gold">Online</p>
-                </div>
-            </div>
-            <div class="card chart-container">
-                <h3 class="gold-text" style="margin-bottom: 15px;">Activity Overview</h3>
-                <canvas id="dashboardChart"></canvas>
-            </div>
-        `;
-        
         const data = this.getData();
-        document.getElementById('stat-prof').innerText = data.professors.length;
-        document.getElementById('stat-stud').innerText = data.students.length;
         
-        setTimeout(() => this.initChart(this.currentUserRole), 50);
+        if(this.currentUserRole === 'admin') {
+            container.innerHTML = `
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <h3>Registered Professors</h3>
+                        <p class="stat-number">${data.professors.length}</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Enrolled Students</h3>
+                        <p class="stat-number">${data.students.length}</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>System Status</h3>
+                        <p class="stat-number gold-text">Online</p>
+                    </div>
+                </div>
+                <div class="card chart-container">
+                    <h3 class="gold-text" style="margin-bottom: 15px;">Admin Activity Overview</h3>
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+            `;
+        } else {
+            container.innerHTML = `
+                <div class="dashboard-grid">
+                    <div class="card stat-card">
+                        <h3>Upcoming Events</h3>
+                        <p class="stat-number">2</p>
+                    </div>
+                    <div class="card stat-card">
+                        <h3>Active Courses</h3>
+                        <p class="stat-number">4</p>
+                    </div>
+                </div>
+                <div class="card chart-container">
+                    <h3 class="gold-text" style="margin-bottom: 15px;">Your Activity</h3>
+                    <canvas id="dashboardChart"></canvas>
+                </div>
+            `;
+        }
+        
+        setTimeout(() => this.initChart(), 50);
     },
 
     renderAdminProfessors(container) {
@@ -249,23 +254,18 @@ const app = {
             <div class="card">
                 <h3 class="gold-text">Add New Professor</h3>
                 <form id="add-prof-form" style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <input type="text" id="prof-name" placeholder="Full Name" required style="flex: 1; min-width: 200px;">
-                    <input type="email" id="prof-email" placeholder="Email" required style="flex: 1; min-width: 200px;">
-                    <input type="text" id="prof-spec" placeholder="Specialty" required style="flex: 1; min-width: 200px;">
-                    <button type="submit" class="gold-btn" style="width: auto; padding: 0.8rem 1.5rem;">Add Professor</button>
+                    <div class="input-group" style="flex:1; margin:0;"><input type="text" id="prof-name" placeholder="Full Name" required></div>
+                    <div class="input-group" style="flex:1; margin:0;"><input type="email" id="prof-email" placeholder="Email" required></div>
+                    <div class="input-group" style="flex:1; margin:0;"><input type="text" id="prof-spec" placeholder="Specialty" required></div>
+                    <button type="submit" class="gold-btn" style="width: auto;">Add</button>
                 </form>
             </div>
             <div class="card">
                 <h3 class="gold-text">Professor Directory</h3>
                 <div style="overflow-x: auto; margin-top: 15px;">
-                    <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 1px solid var(--glass-border); color: var(--gold-primary);">
-                                <th style="padding: 10px;">Name</th>
-                                <th style="padding: 10px;">Email</th>
-                                <th style="padding: 10px;">Specialty</th>
-                                <th style="padding: 10px;">Action</th>
-                            </tr>
+                            <tr><th>Name</th><th>Email</th><th>Specialty</th><th>Action</th></tr>
                         </thead>
                         <tbody id="prof-table-body"></tbody>
                     </table>
@@ -276,33 +276,27 @@ const app = {
         document.getElementById('add-prof-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const data = this.getData();
-            const newProf = {
+            data.professors.push({
                 id: Date.now(),
                 name: document.getElementById('prof-name').value,
                 email: document.getElementById('prof-email').value,
                 specialty: document.getElementById('prof-spec').value,
-                status: 'Unpaid'
-            };
-            data.professors.push(newProf);
+            });
             this.saveData(data);
             e.target.reset();
             this.updateProfTable();
         });
-
         this.updateProfTable();
     },
 
     updateProfTable() {
         const tbody = document.getElementById('prof-table-body');
-        const data = this.getData();
-        tbody.innerHTML = data.professors.map(prof => `
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                <td style="padding: 10px;">${prof.name}</td>
-                <td style="padding: 10px; color: var(--text-gray);">${prof.email}</td>
-                <td style="padding: 10px;">${prof.specialty}</td>
-                <td style="padding: 10px;">
-                    <button onclick="app.deleteUser('professors', ${prof.id})" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
-                </td>
+        tbody.innerHTML = this.getData().professors.map(prof => `
+            <tr>
+                <td>${prof.name}</td>
+                <td style="color: var(--text-gray);">${prof.email}</td>
+                <td>${prof.specialty}</td>
+                <td><button onclick="app.deleteUser('professors', ${prof.id})" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button></td>
             </tr>
         `).join('');
     },
@@ -312,27 +306,24 @@ const app = {
             <div class="card">
                 <h3 class="gold-text">Enroll New Student</h3>
                 <form id="add-stud-form" style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;">
-                    <input type="text" id="stud-name" placeholder="Full Name" required style="flex: 1; min-width: 200px;">
-                    <input type="email" id="stud-email" placeholder="Email" required style="flex: 1; min-width: 200px;">
-                    <select id="stud-level" style="flex: 1; min-width: 200px; padding: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid #333; color: white; border-radius: 8px;">
-                        <option value="Beginner">Beginner</option>
-                        <option value="Intermediate">Intermediate</option>
-                        <option value="Advanced">Advanced</option>
-                    </select>
-                    <button type="submit" class="gold-btn" style="width: auto; padding: 0.8rem 1.5rem;">Enroll</button>
+                    <div class="input-group" style="flex:1; margin:0;"><input type="text" id="stud-name" placeholder="Full Name" required></div>
+                    <div class="input-group" style="flex:1; margin:0;"><input type="email" id="stud-email" placeholder="Email" required></div>
+                    <div class="input-group" style="flex:1; margin:0;">
+                        <select id="stud-level" required>
+                            <option value="Beginner">Beginner</option>
+                            <option value="Intermediate">Intermediate</option>
+                            <option value="Advanced">Advanced</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="gold-btn" style="width: auto;">Enroll</button>
                 </form>
             </div>
             <div class="card">
                 <h3 class="gold-text">Student Directory</h3>
                 <div style="overflow-x: auto; margin-top: 15px;">
-                    <table style="width: 100%; text-align: left; border-collapse: collapse;">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 1px solid var(--glass-border); color: var(--gold-primary);">
-                                <th style="padding: 10px;">Name</th>
-                                <th style="padding: 10px;">Email</th>
-                                <th style="padding: 10px;">Level</th>
-                                <th style="padding: 10px;">Action</th>
-                            </tr>
+                            <tr><th>Name</th><th>Email</th><th>Level</th><th>Action</th></tr>
                         </thead>
                         <tbody id="stud-table-body"></tbody>
                     </table>
@@ -343,32 +334,27 @@ const app = {
         document.getElementById('add-stud-form').addEventListener('submit', (e) => {
             e.preventDefault();
             const data = this.getData();
-            const newStud = {
+            data.students.push({
                 id: Date.now(),
                 name: document.getElementById('stud-name').value,
                 email: document.getElementById('stud-email').value,
                 level: document.getElementById('stud-level').value
-            };
-            data.students.push(newStud);
+            });
             this.saveData(data);
             e.target.reset();
             this.updateStudTable();
         });
-
         this.updateStudTable();
     },
 
     updateStudTable() {
         const tbody = document.getElementById('stud-table-body');
-        const data = this.getData();
-        tbody.innerHTML = data.students.map(stud => `
-            <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
-                <td style="padding: 10px;">${stud.name}</td>
-                <td style="padding: 10px; color: var(--text-gray);">${stud.email}</td>
-                <td style="padding: 10px;">${stud.level}</td>
-                <td style="padding: 10px;">
-                    <button onclick="app.deleteUser('students', ${stud.id})" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
-                </td>
+        tbody.innerHTML = this.getData().students.map(stud => `
+            <tr>
+                <td>${stud.name}</td>
+                <td style="color: var(--text-gray);">${stud.email}</td>
+                <td>${stud.level}</td>
+                <td><button onclick="app.deleteUser('students', ${stud.id})" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button></td>
             </tr>
         `).join('');
     },
@@ -378,36 +364,35 @@ const app = {
             const data = this.getData();
             data[type] = data[type].filter(item => item.id !== id);
             this.saveData(data);
-            
             if(type === 'professors') this.updateProfTable();
             if(type === 'students') this.updateStudTable();
         }
     },
 
-    // --- 6. Charts ---
-    initChart(role) {
+    initChart() {
         const ctx = document.getElementById('dashboardChart');
         if (!ctx) return;
         if (this.currentChart) this.currentChart.destroy();
 
         Chart.defaults.color = '#a0a0a0';
         Chart.defaults.scale.grid.color = 'rgba(255, 255, 255, 0.05)';
+        Chart.defaults.font.family = "'Segoe UI', system-ui, sans-serif";
 
-        let config = {
-            type: 'bar',
+        this.currentChart = new Chart(ctx, {
+            type: 'line',
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'],
                 datasets: [{
-                    label: 'Platform Activity',
-                    data: [12, 19, 15, 22, 18, 28],
-                    backgroundColor: '#D4AF37',
-                    borderRadius: 4
+                    label: 'Platform Engagement',
+                    data: [45, 60, 55, 80, 95],
+                    borderColor: '#D4AF37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    fill: true,
+                    tension: 0.4
                 }]
             },
             options: { responsive: true, maintainAspectRatio: false }
-        };
-
-        this.currentChart = new Chart(ctx, config);
+        });
     }
 };
 
