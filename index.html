@@ -71,19 +71,104 @@
             </div>
         </main>
 
-        <footer class="executive-footer" id="contact">
+        <section id="about" class="about-section">
+            <div class="hero-split align-center fade-in-up">
+                <div class="hero-image-wrapper">
+                    <div class="image-placeholder glow-box" style="aspect-ratio: 4/5;">
+                        <span class="placeholder-text">[ Insert Campus/Students Image ]</span>
+                    </div>
+                </div>
+                <div class="hero-text">
+                    <h2 class="cinematic-title" style="font-size: 3rem;">Forging the Leaders of <span class="gold-text glow">Tomorrow</span></h2>
+                    <p class="hero-subtitle">At Institut Centrale de Tunis, we bridge the gap between academic theory and modern industry demands. Our faculty of seasoned professionals is dedicated to equipping you with practical, high-demand skills in a premium learning environment.</p>
+                    
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <h3 class="gold-text">5+</h3>
+                            <p>Years Excellence</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="gold-text">95%</h3>
+                            <p>Employment Rate</p>
+                        </div>
+                        <div class="stat-item">
+                            <h3 class="gold-text">1.2k+</h3>
+                            <p>Active Alumni</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <div class="contact-container card fade-in-up">
+                <div class="contact-info">
+                    <h2 class="cinematic-title" style="font-size: 2.5rem;">Get In <span class="gold-text glow">Touch</span></h2>
+                    <p class="hero-subtitle" style="font-size: 1rem; margin-bottom: 2rem;">Ready to take the next step in your career? Reach out to our admissions team for personalized guidance.</p>
+                    
+                    <div class="contact-row">
+                        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div class="contact-detail">
+                            <strong>Main Campus</strong>
+                            <p>Avenue Habib Bourguiba, Tunis, Tunisia</p>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                        <div class="contact-detail">
+                            <strong>Phone / WhatsApp</strong>
+                            <p>+216 71 123 456</p>
+                        </div>
+                    </div>
+                    <div class="contact-row">
+                        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div class="contact-detail">
+                            <strong>Email Admissions</strong>
+                            <p>admissions@ict.tn</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form-wrapper">
+                    <form onsubmit="app.handleContactSubmit(event)" class="contact-form">
+                        <div class="input-group">
+                            <i class="fas fa-user input-icon"></i>
+                            <input type="text" id="contact-name" placeholder="Full Name" required>
+                        </div>
+                        <div class="input-group">
+                            <i class="fas fa-envelope input-icon"></i>
+                            <input type="email" id="contact-email" placeholder="Email Address" required>
+                        </div>
+                        <div class="input-group">
+                            <textarea id="contact-message" placeholder="How can we help you?" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="gold-btn"><i class="fas fa-paper-plane"></i> Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <footer class="executive-footer">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h3 class="gold-text" style="font-family: 'Playfair Display', serif;">ICT</h3>
+                    <h3 class="gold-text" style="font-family: 'Playfair Display', serif;">ICT.</h3>
                     <p>Institut Centrale de Tunis.<br>Excellence in executive professional training.</p>
+                    <div class="social-icons" style="margin-top: 1rem;">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
-                    <h4 class="gold-text">Contact Us</h4>
-                    <p><i class="fas fa-envelope" style="margin-right: 8px;"></i> contact@ict.tn</p>
-                    <p><i class="fas fa-phone" style="margin-right: 8px;"></i> +216 71 XXX XXX</p>
+                    <h4 class="gold-text">Quick Links</h4>
+                    <a href="#home">Home</a>
+                    <a href="#programs">Programs</a>
+                    <a href="#about">About Us</a>
+                    <a href="#" onclick="app.goToAuth()">Student Portal</a>
                 </div>
                 <div class="footer-col">
                     <h4 class="gold-text">Newsletter</h4>
+                    <p>Subscribe for updates and admissions news.</p>
                     <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
                         <input type="email" placeholder="Email Address" required>
                         <button type="submit" class="gold-btn" style="color: #000;">Subscribe</button>

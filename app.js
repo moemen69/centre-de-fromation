@@ -56,6 +56,12 @@ const app = {
         if (landingMenu.classList.contains('open')) landingMenu.classList.remove('open');
     },
 
+    handleContactSubmit(e) {
+        e.preventDefault();
+        alert('Thank you for contacting ICT! Your message has been sent to admissions.');
+        e.target.reset();
+    },
+
     // --- Authentication ---
     toggleAuth(tab) {
         const loginForm = document.getElementById('login-form');
@@ -157,8 +163,8 @@ const app = {
         const titleMap = { 'dashboard': 'Dashboard', 'professors': 'Manage Professors', 'students': 'Manage Students', 'profile': 'My Profile', 'tasks': 'Task Board', 'classroom': 'Classroom Feed' };
         pageTitle.innerText = titleMap[view] || view;
         
-        viewContainer.innerHTML = ''; // Clear prior content
-        viewContainer.classList.add('fade-in-up'); // Re-trigger animation
+        viewContainer.innerHTML = ''; 
+        viewContainer.classList.add('fade-in-up');
         setTimeout(() => viewContainer.classList.remove('fade-in-up'), 600);
 
         if (view === 'dashboard') this.renderDashboard(viewContainer);
@@ -404,7 +410,7 @@ const app = {
                 <div id="comments-${post.id}" class="comments-section hidden">
                     ${(post.comments||[]).map(c => `<div class="comment-item"><span class="comment-author">${c.author}:</span> ${c.text}</div>`).join('')}
                     <form class="comment-form" onsubmit="app.handleAddComment(event, ${post.id})">
-                        <input type="text" id="comment-input-${post.id}" placeholder="Write a reply..." required>
+                        <input type="text" id="comment-input-${post.id}" placeholder="Write a reply..." required style="flex:1; padding:0.8rem; background:var(--bg-surface); border:1px solid var(--border-subtle); color:white; border-radius:6px;">
                         <button type="submit" class="gold-btn" style="width:auto; padding:0.5rem 1rem;">Post</button>
                     </form>
                 </div>
